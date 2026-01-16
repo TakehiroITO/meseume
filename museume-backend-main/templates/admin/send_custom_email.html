@@ -1,0 +1,36 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static admin_urls %}
+
+{% block content %}
+  <h1>Send Custom Email</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <!-- Render all hidden fields (including _selected_action) -->
+    {% for hidden_field in form.hidden_fields %}
+      {{ hidden_field }}
+    {% endfor %}
+
+    <div class="form-row">
+      <label for="{{ form.subject.id_for_label }}">Subject:</label>
+      {{ form.subject }}
+      {% if form.subject.errors %}
+        <div class="errors">{{ form.subject.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-row">
+      <label for="{{ form.message.id_for_label }}">Message:</label>
+      {{ form.message }}
+      {% if form.message.errors %}
+        <div class="errors">{{ form.message.errors }}</div>
+      {% endif %}
+    </div>
+
+    <input type="hidden" name="action" value="send_custom_message">
+    <input type="hidden" name="apply" value="1">
+    <button type="submit" class="default">Send</button>
+    <a href="{% url 'admin:member_regularmember_changelist' %}" class="button cancel-link">Cancel</a>
+  </form>
+{% endblock %}

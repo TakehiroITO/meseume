@@ -1,0 +1,28 @@
+<!-- templates/login_notification.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ title }}</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f7f7f7;">
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+    <tr>
+      <td style="padding: 20px;">
+        <!-- Title section -->
+        <h2 style="margin-top: 0; font-size: 24px;">{{ title }}</h2>
+
+        <!-- Content section -->
+        <p style="font-size: 16px; line-height: 1.6;">
+          {{ login_time }} に 
+          <strong>museume.art</strong>
+          へのログインが確認されました。
+        </p>
+        <p style="font-size: 16px; line-height: 1.6;">
+          もし心当たりがない方は、お手数ですが運営までご連絡ください。
+        </p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

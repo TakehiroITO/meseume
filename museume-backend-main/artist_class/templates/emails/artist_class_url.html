@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>コースへのアクセス</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 0; padding: 0;">
+  <div style="max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    <h2 style="color: #333333; text-align: center;">{{ course_name }} へようこそ</h2>
+    <p style="font-size: 16px; color: #555555;">親愛なる{{ user_name }},</p>
+    <p style="font-size: 16px; color: #555555;">
+      <strong>{{ course_name }}</strong> にご登録いただきありがとうございます。ぜひご参加ください。
+    </p>
+    <p style="font-size: 16px; color: #555555;">
+      コースにアクセスするには、下のボタンをクリックしてください。
+    </p>
+    <p style="text-align: center; margin: 20px 0;">
+      <a href="{{ course_link }}" style="padding: 12px 25px; background-color: #007BFF; color: #ffffff; text-decoration: none; font-size: 16px; border-radius: 5px;">
+        クラスにアクセスする
+      </a>
+    </p>
+    <p style="font-size: 16px; color: #555555;">
+      上のボタンが機能しない場合は、次の URL をコピーしてブラウザに貼り付けてください。
+      <br>
+      <a href="{{ course_link }}" style="color: #007BFF; text-decoration: none;">{{ course_link }}</a>
+    </p>
+    <p style="font-size: 16px; color: #555555;">
+      ご質問がございましたら、お気軽にサポート チーム（<a href="mailto:{{mailto}}" style="color: #007BFF;">{{mailto}}</a>）までお問い合わせください。
+    </p>
+    <p style="font-size: 16px; color: #555555;">Best regards,</p>
+    <p style="font-size: 16px; color: #555555;">The [Your Organization Name] Team</p>
+    <hr style="border: none; border-top: 1px solid #dddddd; margin: 20px 0;">
+    <p style="font-size: 12px; color: #888888; text-align: center;">
+      このメールは、{{ organization_name }} のコースに登録された方にお送りしています。
+    </p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+media/*
+*.pyc
+.env
+
+.env.local
+db_local.sqlite3
+manage_local.py
+member/backends.py
+museum_app/settings_local.py
+create_test_data.py

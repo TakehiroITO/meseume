@@ -1,0 +1,794 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-02-07 07:17+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: advertisement/apps.py:7 advertisement/models.py:26
+msgid "Advertisement"
+msgstr "広告"
+
+#: advertisement/models.py:14
+msgid "Name of the advertisement plan"
+msgstr "広告プランの名前"
+
+#: advertisement/models.py:14 artist_class/models.py:16 billing/models.py:11
+#: contest/models.py:12 member/models.py:11 work/models.py:67 work/models.py:77
+msgid "name"
+msgstr "名前"
+
+#: advertisement/models.py:16
+msgid "Banner frame type"
+msgstr "バナーフレームの種類"
+
+#: advertisement/models.py:16
+msgid "banner frame"
+msgstr "バナーフレーム"
+
+#: advertisement/models.py:19
+msgid "Type of the image"
+msgstr "画像の種類"
+
+#: advertisement/models.py:19
+msgid "ad type"
+msgstr "広告の種類"
+
+#: advertisement/models.py:21
+msgid "Upload the banner image"
+msgstr "バナー画像をアップロード"
+
+#: advertisement/models.py:21
+msgid "banner image"
+msgstr "バナー画像"
+
+#: advertisement/models.py:22
+msgid "Start date of the display period"
+msgstr "表示期間の開始日"
+
+#: advertisement/models.py:22 artist_class/models.py:25 contest/models.py:14
+msgid "start date"
+msgstr "開始日"
+
+#: advertisement/models.py:23
+msgid "End date of the display period"
+msgstr "表示期間の終了日"
+
+#: advertisement/models.py:23 artist_class/models.py:26 contest/models.py:15
+msgid "end date"
+msgstr "終了日"
+
+#: advertisement/models.py:27
+msgid "Advertisements"
+msgstr "広告"
+
+#: advertisement/models.py:34
+msgid "Currently Active"
+msgstr "現在アクティブ"
+
+#: advertisement/views.py:45
+msgid "Advertisement updated successfully."
+msgstr "広告が正常に更新されました。"
+
+#: advertisement/views.py:58
+msgid "Advertisement created successfully."
+msgstr "広告が正常に作成されました。"
+
+#: artist_class/apps.py:7 artist_class/models.py:34
+msgid "Artist Class"
+msgstr "アーティストクラス"
+
+#: artist_class/models.py:17 work/models.py:47
+msgid "category"
+msgstr "カテゴリー"
+
+#: artist_class/models.py:18 work/models.py:46
+msgid "tags"
+msgstr "タグ"
+
+#: artist_class/models.py:19
+msgid "is free"
+msgstr "無料"
+
+#: artist_class/models.py:21
+msgid "class type"
+msgstr "クラスの種類"
+
+#: artist_class/models.py:23 contest/models.py:16
+msgid "thumbnail"
+msgstr "サムネイル"
+
+#: artist_class/models.py:24 public_site/models.py:10
+msgid "url"
+msgstr "URL"
+
+#: artist_class/models.py:27 billing/models.py:77 contest/models.py:35
+#: inquiry/models.py:9 member/models.py:27 public_site/models.py:18
+#: work/models.py:12 work/models.py:48
+msgid "created at"
+msgstr "作成日"
+
+#: artist_class/models.py:28 billing/models.py:78 contest/models.py:36
+#: member/models.py:28 public_site/models.py:19 work/models.py:13
+#: work/models.py:49
+msgid "updated at"
+msgstr "更新日"
+
+#: artist_class/models.py:29
+msgid "cost"
+msgstr "費用"
+
+#: artist_class/models.py:30 contest/models.py:62 work/models.py:41
+msgid "description"
+msgstr "説明"
+
+#: artist_class/models.py:35
+msgid "Artist Classes"
+msgstr "アーティストクラス"
+
+#: artist_class/views.py:93
+msgid "Payment is pending for this class."
+msgstr "このクラスの支払いが保留中です。"
+
+#: artist_class/views.py:94
+msgid "You are already signed up for this class."
+msgstr "このクラスにはすでに登録されています。"
+
+#: artist_class/views.py:100
+msgid "Cannot sign up for this class as the cost is not specified."
+msgstr "料金が指定されていないため、このクラスに登録できません。"
+
+#: artist_class/views.py:139
+msgid "Payment required. Complete payment to register for the class."
+msgstr "支払いが必要です。登録するには支払いを完了してください。"
+
+#: artist_class/views.py:147
+#, fuzzy
+#| msgid "You are already signed up for this class."
+msgid "Successfully Signed up for the class"
+msgstr "このクラスにはすでに登録されています。"
+
+#: artist_class/views.py:155 artist_class/views.py:252
+#: artist_class/views.py:307
+msgid "Class not found."
+msgstr "クラスが見つかりません。"
+
+#: artist_class/views.py:285
+msgid "You are not registered for this class."
+msgstr "このクラスには登録されていません。"
+
+#: artist_class/views.py:290
+msgid "User email is not available."
+msgstr "ユーザーのメールアドレスが利用できません。"
+
+#: artist_class/views.py:304
+msgid "Video URL has been sent to your email."
+msgstr "ビデオのURLがメールに送信されました。"
+
+#: artist_class/views.py:352
+msgid "Payment Intent ID is required."
+msgstr "支払いインテントIDが必要です。"
+
+#: artist_class/views.py:361
+msgid "Payment has not succeeded yet."
+msgstr "支払いはまだ成功していません。"
+
+#: artist_class/views.py:375
+msgid "Pending signup not found."
+msgstr "保留中の登録が見つかりません。"
+
+#: artist_class/views.py:380
+msgid "Payment confirmed and class signup updated successfully."
+msgstr "支払いが確認され、クラスの登録が正常に更新されました。"
+
+#: artist_class/views.py:383
+msgid "Payment record not found."
+msgstr "支払い記録が見つかりません。"
+
+#: billing/apps.py:8
+msgid "billing"
+msgstr "請求する"
+
+#: billing/models.py:12
+msgid "subscription id"
+msgstr "サブスクリプションがキャンセルされました"
+
+#: billing/models.py:13
+msgid "amount"
+msgstr "金額"
+
+#: billing/models.py:14
+msgid "currency"
+msgstr "通貨"
+
+#: billing/models.py:15
+msgid "interval"
+msgstr "間隔"
+
+#: billing/models.py:16
+msgid "Comma-separated list of features"
+msgstr "機能のカンマ区切りリスト"
+
+#: billing/models.py:16
+msgid "features"
+msgstr "機能"
+
+#: billing/models.py:21
+msgid "Plan"
+msgstr "プラン"
+
+#: billing/models.py:22
+msgid "Plans"
+msgstr "プラン"
+
+#: billing/models.py:72 contest/models.py:58 work/models.py:42
+msgid "member"
+msgstr "メンバー"
+
+#: billing/models.py:73
+msgid "stripe subscription id"
+msgstr "アクティブなサブスクリプションが見つかりません"
+
+#: billing/models.py:74
+msgid "customer id"
+msgstr "顧客ID"
+
+#: billing/models.py:75
+msgid "plan"
+msgstr "プラン"
+
+#: billing/models.py:76
+msgid "is active"
+msgstr "承認済み"
+
+#: billing/models.py:81
+msgid "Subscription"
+msgstr "説明"
+
+#: billing/models.py:82
+msgid "Subscriptions"
+msgstr "説明"
+
+#: billing/views.py:88
+msgid "Only Protectors can cancel a subscription."
+msgstr "サブスクリプションをキャンセルできるのは保護者のみです。"
+
+#: billing/views.py:98
+msgid "subscription cancelled"
+msgstr "サブスクリプションがキャンセルされました"
+
+#: billing/views.py:100
+msgid "No active subscription found"
+msgstr "アクティブなサブスクリプションが見つかりません"
+
+#: contest/admin.py:41 member/apps.py:8 member/models.py:144
+msgid "Member"
+msgstr "メンバー"
+
+#: contest/admin.py:52 work/models.py:59
+msgid "Work"
+msgstr "作品"
+
+#: contest/admin.py:74
+msgid "Work Images"
+msgstr "画像"
+
+#: contest/admin.py:86
+#, fuzzy
+#| msgid "Already liked"
+msgid "Already the winner"
+msgstr "既にいいねされています"
+
+#: contest/admin.py:88
+msgid "Winner already chosen"
+msgstr "勝者はすでに選ばれています"
+
+#: contest/admin.py:100
+msgid "Action"
+msgstr "応用"
+
+#: contest/admin.py:122
+#, fuzzy
+#| msgid "Contests"
+msgid "Contest Status"
+msgstr "コンテスト"
+
+#: contest/admin.py:232
+msgid "Company Name"
+msgstr "会社名"
+
+#: contest/admin.py:265
+#, fuzzy
+#| msgid "You do not have permission to view this contest."
+msgid "You do not have permission to mark a winner."
+msgstr "このコンテストを表示する権限がありません。"
+
+#: contest/apps.py:8 contest/models.py:59
+msgid "contest"
+msgstr "コンテスト"
+
+#: contest/models.py:11
+msgid "organization"
+msgstr "組織"
+
+#: contest/models.py:13
+msgid "explanation"
+msgstr "説明"
+
+#: contest/models.py:17
+msgid "Private contest (visible only to organization members)"
+msgstr "プライベートコンテスト（組織メンバーのみ表示）"
+
+#: contest/models.py:17
+msgid "is private"
+msgstr "非公開"
+
+#: contest/models.py:22
+msgid "Condition for awarding the contest winner"
+msgstr "コンテストの受賞条件"
+
+#: contest/models.py:23
+msgid "condition"
+msgstr "説明"
+
+#: contest/models.py:31
+msgid "Winning work of the contest"
+msgstr "コンテストの受賞作品"
+
+#: contest/models.py:32
+msgid "winner"
+msgstr "受賞者"
+
+#: contest/models.py:34
+msgid "Eligibility criteria for participants"
+msgstr "参加者の資格基準"
+
+#: contest/models.py:34
+msgid "eligible criteria"
+msgstr "資格基準"
+
+#: contest/models.py:40
+msgid "Contest"
+msgstr "コンテスト"
+
+#: contest/models.py:41
+msgid "Contests"
+msgstr "コンテスト"
+
+#: contest/models.py:60 work/apps.py:8 work/models.py:11
+msgid "work"
+msgstr "作品"
+
+#: contest/models.py:61
+msgid "submission date"
+msgstr "提出日"
+
+#: contest/models.py:66
+msgid "Application"
+msgstr "応用"
+
+#: contest/models.py:67
+msgid "Applications"
+msgstr "アプリケーション"
+
+#: contest/serializers.py:53
+msgid "This work has already been submitted to this contest."
+msgstr "この作品は既に本コンテストに応募済みです。"
+
+#: contest/views.py:50 contest/views.py:53
+msgid "You do not have permission to view this contest."
+msgstr "このコンテストを表示する権限がありません。"
+
+#: contest/views.py:76
+msgid "Work has been successfully submitted to the contest."
+msgstr "作品はコンテストに無事提出されました。"
+
+#: inquiry/apps.py:8
+msgid "inquiry"
+msgstr "問い合わせ"
+
+#: inquiry/models.py:5
+msgid "email"
+msgstr "メール"
+
+#: inquiry/models.py:6
+msgid "user name"
+msgstr "名前"
+
+#: inquiry/models.py:7
+msgid "subject"
+msgstr "件名"
+
+#: inquiry/models.py:8
+msgid "message"
+msgstr "メッセージ"
+
+#: inquiry/models.py:12
+msgid "Inquiry"
+msgstr "問い合わせ"
+
+#: inquiry/models.py:13
+msgid "Inquiries"
+msgstr "問い合わせ"
+
+#: inquiry/views.py:23
+msgid "Please provide user name and email."
+msgstr "ユーザー名とメールアドレスを入力してください。"
+
+#: inquiry/views.py:38
+msgid "Your Inquiry is submitted successfully."
+msgstr "お問い合わせが正常に送信されました。"
+
+#: member/admin.py:27
+msgid "Museume Administration"
+msgstr "Museume 管理"
+
+#: member/admin.py:28
+msgid "Welcome to Your Admin Panel"
+msgstr "管理パネルへようこそ"
+
+#: member/admin.py:229
+msgid "Send custom message to selected users"
+msgstr "選択したユーザーにカスタムメッセージを送信する"
+
+#: member/admin.py:233 member/models.py:31 member/models.py:92
+#: member/models.py:94
+msgid "Organization"
+msgstr "組織"
+
+#: member/admin.py:354 member/models.py:32
+msgid "Organizations"
+msgstr "組織"
+
+#: member/admin.py:406
+msgid "Remove selected profiles from my organization"
+msgstr "選択したプロファイルを組織から削除します"
+
+#: member/models.py:9
+msgid "Parent Organization"
+msgstr "親組織"
+
+#: member/models.py:12
+msgid "Organization admin email"
+msgstr "組織管理者のメール"
+
+#: member/models.py:12
+msgid "email address"
+msgstr "メールアドレス"
+
+#: member/models.py:13
+msgid "Organization username will be used for museume email address"
+msgstr "組織のユーザー名が美術館の電子メール アドレスに使用されます"
+
+#: member/models.py:13
+msgid "username"
+msgstr "名前"
+
+#: member/models.py:14
+msgid "Organization admin staff name"
+msgstr "組織管理者のスタッフ名"
+
+#: member/models.py:14
+msgid "staff name"
+msgstr "スタッフ名"
+
+#: member/models.py:15 member/models.py:99
+msgid "address"
+msgstr "住所"
+
+#: member/models.py:16
+msgid "Organization Code"
+msgstr "組織"
+
+#: member/models.py:21
+msgid "Profile picture of the organization"
+msgstr "組織のプロフィール写真"
+
+#: member/models.py:22
+msgid "icon"
+msgstr "アイコン"
+
+#: member/models.py:24
+#, fuzzy
+#| msgid "email address"
+msgid "custom email address"
+msgstr "メールアドレス"
+
+#: member/models.py:25
+msgid "city"
+msgstr "市"
+
+#: member/models.py:26
+#, fuzzy
+#| msgid "amount"
+msgid "country"
+msgstr "金額"
+
+#: member/models.py:90
+msgid "Email"
+msgstr "メール"
+
+#: member/models.py:96
+msgid "Parent Account"
+msgstr "親アカウント"
+
+#: member/models.py:98 work/models.py:44
+msgid "is approved"
+msgstr "承認済み"
+
+#: member/models.py:100
+msgid "data of birth"
+msgstr "生年月日"
+
+#: member/models.py:107
+msgid "Role of the member in the organization"
+msgstr "組織内のメンバーの役割"
+
+#: member/models.py:108
+msgid "role"
+msgstr "役割"
+
+#: member/models.py:111
+msgid "shared users"
+msgstr "共有ユーザー"
+
+#: member/models.py:113
+msgid "Is the member published?"
+msgstr "メンバーは公開されていますか？"
+
+#: member/models.py:113
+msgid "is published"
+msgstr "公開"
+
+#: member/models.py:137 member/models.py:138
+msgid "Staff"
+msgstr "スタッフ"
+
+#: member/models.py:145
+msgid "Members"
+msgstr "メンバー"
+
+#: member/models.py:150
+msgid "ProfileMember"
+msgstr "メンバー"
+
+#: member/models.py:151
+msgid "ProfileMembers"
+msgstr "メンバー"
+
+#: member/serializers.py:27 member/serializers.py:245
+msgid "Passwords do not match."
+msgstr "パスワードが一致しません。"
+
+#: member/serializers.py:34 member/serializers.py:251
+msgid "Password must be between 8 and 32 characters."
+msgstr "パスワードは8文字から32文字である必要があります。"
+
+#: member/serializers.py:38
+msgid "Password must contain only alphanumeric characters."
+msgstr "パスワードは英数字のみを含む必要があります。"
+
+#: member/serializers.py:42
+msgid ""
+"Password must contain at least one uppercase letter, one lowercase letter, "
+"and one number."
+msgstr ""
+"パスワードには、少なくとも1つの大文字、1つの小文字、および1つの数字を含める必"
+"要があります。"
+
+#: member/serializers.py:70
+msgid "Email or password is incorrect."
+msgstr "メールアドレスまたはパスワードが間違っています。"
+
+#: member/serializers.py:73
+msgid "Only protectors are allowed to login"
+msgstr "保護者のみがログインできます"
+
+#: member/serializers.py:99
+#, fuzzy
+#| msgid "Profile logged in successfully"
+msgid "Login successful"
+msgstr "プロファイルが正常にログインしました"
+
+#: member/serializers.py:271
+msgid "Permission denied. Only protectors can update account information."
+msgstr "権限が拒否���れました。保護者のみがアカウント情報を更新できます。"
+
+#: member/serializers.py:302
+msgid "Profile with this username does not exist."
+msgstr "このユーザー名の子供は存在しません。"
+
+#: member/serializers.py:306
+msgid "Unable to authenticate profile."
+msgstr "プロファイルを認証できません。"
+
+#: member/serializers.py:313
+msgid "Only protectors can add a profile."
+msgstr "プロファイルを追加できるのは保護者のみです。"
+
+#: member/serializers.py:326
+msgid "Profile logged in successfully"
+msgstr "プロファイルが正常にログインしました"
+
+#: member/views.py:67
+msgid "Email verified successfully"
+msgstr "メールが正常に確認されました"
+
+#: member/views.py:69
+msgid "Invalid or expired token"
+msgstr "トークンが無効または期限切れです"
+
+#: member/views.py:144
+msgid "Password reset link sent."
+msgstr "パスワードリセットリンクが送信されました。"
+
+#: member/views.py:158
+msgid "Invalid token."
+msgstr "無効なトークンです。"
+
+#: member/views.py:165
+msgid "Password has been reset."
+msgstr "パスワードがリセットされました。"
+
+#: member/views.py:223
+msgid "Invalid code"
+msgstr "無効なトークンです。"
+
+#: member/views.py:238
+#, fuzzy
+#| msgid "Profile logged in successfully"
+msgid "Profile deleted successfully"
+msgstr "プロファイルが正常にログインしました"
+
+#: member/views.py:249
+#, fuzzy
+#| msgid "Advertisement updated successfully."
+msgid "Account deleted successfully"
+msgstr "広告が正常に更新されました。"
+
+#: museum_app/exceptions.py:34
+msgid "An unexpected error occurred. Please try again later."
+msgstr "予期しないエラーが発生しました。後でもう一度お試しください。"
+
+#: museum_app/permissions.py:8
+msgid "Access restricted to profile users only."
+msgstr "アクセスはプロファイルユーザーに制限されています。"
+
+#: museum_app/settings.py:210
+msgid "English"
+msgstr "英語"
+
+#: museum_app/settings.py:211
+msgid "Japanese"
+msgstr "日本語"
+
+#: public_site/apps.py:8
+msgid "Public Site Settings"
+msgstr "公開サイトの設定"
+
+#: public_site/models.py:15
+msgid "Type of navbar"
+msgstr "ナビバーの種類"
+
+#: public_site/models.py:16
+msgid "type"
+msgstr "種類"
+
+#: public_site/models.py:22 public_site/models.py:23
+msgid "Public NavBar"
+msgstr "公開ナビバー"
+
+#: work/admin.py:88
+msgid "Approve selected works"
+msgstr "選択した作品を承認する"
+
+#: work/admin.py:93
+msgid "Work(s) have been successfully approved."
+msgstr "この作品はすでにこのコンテストに提出されています。"
+
+#: work/admin.py:108
+msgid "No images"
+msgstr "画像"
+
+#: work/admin.py:110 work/models.py:17
+msgid "Images"
+msgstr "画像"
+
+#: work/models.py:9
+msgid "image"
+msgstr "画像"
+
+#: work/models.py:10
+msgid "hash"
+msgstr "ハッシュ"
+
+#: work/models.py:16
+msgid "Image"
+msgstr "画像"
+
+#: work/models.py:27 work/serializers.py:46
+msgid "Image already exists in the system."
+msgstr "イメージはシステムにすでに存在します。"
+
+#: work/models.py:40
+msgid "title"
+msgstr "タイトル"
+
+#: work/models.py:43
+msgid "is public"
+msgstr "公開"
+
+#: work/models.py:45
+msgid "price"
+msgstr "価格"
+
+#: work/models.py:54
+msgid "public visibility"
+msgstr "公開可視性"
+
+#: work/models.py:60
+msgid "Works"
+msgstr "作品"
+
+#: work/models.py:70
+msgid "Tag"
+msgstr "タグ"
+
+#: work/models.py:71
+msgid "Tags"
+msgstr "タグ"
+
+#: work/models.py:80
+msgid "Category"
+msgstr "カテゴリー"
+
+#: work/models.py:81
+msgid "Categories"
+msgstr "カテゴリー"
+
+#: work/serializers.py:37
+msgid "Image size cannot exceed 5MB."
+msgstr "画像サイズは5MBを超えることはできません。"
+
+#: work/serializers.py:41
+msgid "Only PNG and JPG images are allowed."
+msgstr "PNGおよびJPG画像のみが許可されています。"
+
+#: work/serializers.py:94 work/serializers.py:115
+msgid "You can upload a maximum of 5 images for an artwork."
+msgstr "アートワークには最大5枚の画像をアップロードできます。"
+
+#: work/views.py:94
+msgid "Liked"
+msgstr "いいね"
+
+#: work/views.py:96
+msgid "Already liked"
+msgstr "既にいいねされています"
+
+#: work/views.py:109
+msgid "Unliked"
+msgstr "いいねを取り消しました"
+
+#: work/views.py:111
+msgid "You haven't liked this work"
+msgstr "この作品にまだいいねしていません"
+
+#~ msgid "Type of organization"
+#~ msgstr "組織の種類"
+
+#~ msgid "organization type"
+#~ msgstr "組織の種類"

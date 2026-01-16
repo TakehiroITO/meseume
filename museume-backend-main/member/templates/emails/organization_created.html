@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>組織が作成されました</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 0; padding: 0;">
+  <div style="max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    <h2 style="color: #333333; text-align: center;">Museumeへようこそ {{ organization_name }}</h2>
+    <p style="font-size: 16px; color: #555555;">Dear {{ user_name }},</p>
+    <p style="font-size: 16px; color: #555555;">
+      組織 <strong>{{ organization_name }}</strong> が正常に作成されました。これで、以下に提供される認証情報を使用してログインし、アカウントを管理できるようになります。
+    </p>
+    <p style="font-size: 16px; color: #555555;">
+      <strong>電子メール:</strong> {{ email }}<br>
+      <strong>パスワード:</strong> {{ password }}
+    </p>
+
+    <p style="font-size: 16px; color: #555555;">
+      セキュリティ上の理由から、最初のログイン後は必ずパスワードを変更してください。
+    </p>
+    <p style="font-size: 16px; color: #555555;">
+      ご質問がございましたら、お気軽にサポート チーム（<a href="mailto:{{mailto}}" style="color: #007BFF;">{{mailto}}</a>）までお問い合わせください。.
+    </p>
+    <p style="font-size: 16px; color: #555555;">よろしくお願いします、</p>
+    <p style="font-size: 16px; color: #555555;">Museumeチーム</p>
+    <hr style="border: none; border-top: 1px solid #dddddd; margin: 20px 0;">
+    <p style="font-size: 12px; color: #888888; text-align: center;">
+      あなたの組織が私たちのプラットフォームで作成されたために、このメールが届いています。
+    </p>
+  </div>
+</body>
+</html>

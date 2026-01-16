@@ -1,0 +1,14 @@
+{% extends "admin/base_site.html" %}
+
+{% block nav-global %}
+<form action="{% url 'set_language' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.path }}" />
+    <select name="language">
+      <option value="en">English</option>
+      <option value="ja">Japanese</option>
+    </select>
+    <input type="submit" value="Switch">
+  </form>
+  
+{% endblock %}
