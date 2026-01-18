@@ -24,18 +24,30 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-j0gpj%9o!w837utd!n9jvhje9^3j7#l-ntah)61+!s3jn8eame'
+# SECURITY: SECRET_KEY must be set via environment variable
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+if not SECRET_KEY:
+    raise ValueError("DJANGO_SECRET_KEY environment variable is required")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# SECURITY: DEBUG must be False in production
+DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = ["*"]
+# SECURITY: ALLOWED_HOSTS must be explicitly defined (never use "*" in production)
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+    if host.strip()
+]
 
 # Configure HTTPS detection for production environments behind reverse proxy
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-CORS_ALLOW_ALL_ORIGINS = True
-CSRF_TRUSTED_ORIGINS = ["https://wegolive.com", "https://museume.art", "http://localhost:3000"]
+
+# SECURITY: CORS origins must be explicitly defined (removed CORS_ALLOW_ALL_ORIGINS)
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv('CSRF_TRUSTED_ORIGINS', 'http://localhost:3000').split(',')
+    if origin.strip()
+]
 
 CORS_ALLOW_HEADERS = [
     'authorization',
@@ -53,10 +65,11 @@ CORS_ALLOW_METHODS = [
     'DELETE',
     'OPTIONS',
 ]
+# CORS allowed origins from environment variable
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',  # Your frontend origin for development
-    'https://wegolive.com',  # Your production origin
-    'https://museume.art/',
+    origin.strip()
+    for origin in os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000').split(',')
+    if origin.strip()
 ]
 
 
@@ -240,28 +253,5 @@ CSRF_COOKIE_HTTPONLY = False
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_SAMESITE = 'Lax'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    # Add your production URLs
-]
-
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-]
+# Note: CORS_ALLOWED_ORIGINS, CORS_ALLOW_METHODS, CORS_ALLOW_HEADERS
+# are defined above (lines 68-73, 56-67, 52-59)
