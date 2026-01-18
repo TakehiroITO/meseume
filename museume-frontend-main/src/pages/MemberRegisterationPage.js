@@ -48,7 +48,17 @@ const MemberRegistrationPage = () => {
     }
   
     if (isValid) {
-      const userData = { email, password, confirm_password: password };
+      // Generate username from email (part before @)
+      // If username already exists, backend will return an error
+      const emailParts = email.split('@');
+      const generatedUsername = emailParts[0].replace(/[^a-zA-Z0-9_]/g, '_');
+
+      const userData = {
+        username: generatedUsername,
+        email,
+        password,
+        confirm_password: password
+      };
       dispatch(signup(userData));
     }
   };

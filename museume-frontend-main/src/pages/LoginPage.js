@@ -22,8 +22,8 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const credentials = { email, password };
-    // Validate email and password
+
+    // Validate email/username and password
     if (!email) {
       setEmailError(t('Email is required'));
     } else {
@@ -35,8 +35,19 @@ const LoginPage = () => {
       setPasswordError('');
     }
     if (email && password) {
+      // Detect if input is email or username
+      // Email contains '@', username does not
+      const isEmail = email.includes('@');
+      const credentials = isEmail
+        ? { email, password }
+        : { username: email, password };
+
       dispatch(login(credentials)).then((action) => {
         if (action.type === 'auth/login/fulfilled') {
+          // Store ULID if available in response
+          if (action.payload?.ulid) {
+            localStorage.setItem('userUlid', action.payload.ulid);
+          }
           navigate('/add-user'); // Navigate to add-user page after successful login
         } else if (action.type === 'auth/login/rejected') {
           // setEmailError(t('Invalid email or password'));
