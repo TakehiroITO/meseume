@@ -5,6 +5,8 @@ from django.db.models import Q
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
+from .helpers import generate_ulid, generate_child_email, extract_parent_email, is_child_email
+
 class Organization(models.Model):
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name="branches", verbose_name=_("Parent Organization"))
 
@@ -87,6 +89,21 @@ class Member(AbstractUser):
         ('child', 'Child'),
     ]
 
+    # ULID: Immutable internal identifier (public ID for external reference)
+    # This is separate from Django's auto-generated 'id' for compatibility
+    ulid = models.CharField(
+        max_length=26,
+        unique=True,
+        editable=False,
+        verbose_name=_('ULID'),
+        help_text=_('Immutable unique identifier for external reference')
+    )
+
+    # Username: Used for login authentication (immutable after creation)
+    # Note: username field is inherited from AbstractUser, we override to emphasize immutability
+
+    # Email: Used for communication (mutable)
+    # For children: initially set to parent_email#child_ULID format
     email = models.EmailField(unique=True, null=False, blank=False, verbose_name=_('Email'),)
     organizations = models.ManyToManyField(
         Organization, blank=True, related_name="members", verbose_name=_('Organization'),
@@ -112,23 +129,58 @@ class Member(AbstractUser):
     )
     is_published = models.BooleanField(default=False, help_text=_("Is the member published?"), verbose_name=_("is published"))
 
+    def save(self, *args, **kwargs):
+        # Auto-generate ULID if not set
+        if not self.ulid:
+            self.ulid = generate_ulid()
+
+        # For child accounts without email, generate from parent's email
+        if self.role == 'child' and self.parent and not self.email:
+            self.email = generate_child_email(self.parent.email, self.ulid)
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return self.username if self.role=="child" else self.email
-    
+        return self.username if self.role == "child" else self.email
+
+    def get_notification_email(self):
+        """
+        Get the email address to use for sending notifications.
+
+        For child accounts with generated emails, returns the parent's email.
+        Otherwise returns the member's own email.
+        """
+        if is_child_email(self.email):
+            return extract_parent_email(self.email)
+        return self.email
+
+    def is_child_account(self):
+        """Check if this is a child account with a generated email."""
+        return self.role == 'child' and is_child_email(self.email)
+
+    def can_update_email(self):
+        """
+        Check if this member can update their email address.
+
+        Children with generated emails can update to become independent.
+        All other members can always update their email.
+        """
+        return True  # All members can update email (children can become independent)
+
     def get_sibilings(self):
         return self.parent.children.all() if self.parent else []
-    
+
     def get_shared_siblings(self):
         """Get siblings that are shared with this member."""
         if not self.parent:
             return Member.objects.none()
-        
+
         # Get all siblings (excluding self)
         siblings = self.parent.children.exclude(id=self.id)
-        
+
         # Filter siblings that have shared this user
         shared_siblings = siblings.filter(shared_users=self)
-        
+
         return shared_siblings
 
 class StaffMember(Member):
