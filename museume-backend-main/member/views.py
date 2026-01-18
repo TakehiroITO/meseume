@@ -36,18 +36,21 @@ class SignupView(generics.CreateAPIView):
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         frontend_url = os.environ.get('FRONTEND_URL')
         verification_url = f"{frontend_url}verify-email?uid={uid}&token={token}/"
-        
+
         print(f"Email verification link: {verification_url}")
 
+        # Use get_notification_email for child accounts (sends to parent)
+        notification_email = user.get_notification_email()
+
         context = {
-            'user_name': user.first_name,
+            'user_name': user.first_name or user.username,
             'verification_link': verification_url,
         }
         send_email(
             template_name='emails/email_verification.html',
             subject="Verify Your Email Address",
             context=context,
-            recipient_email=user.email,
+            recipient_email=notification_email,
         )
 
 
@@ -130,16 +133,19 @@ class PasswordResetRequestView(generics.GenericAPIView):
         reset_link = f"{frontend_url}password-reset-confirm?uid={uid}&token={token}/"
 
         print(f"Reset Password link: {reset_link}")
-        
+
+        # Use get_notification_email for child accounts (sends to parent)
+        notification_email = user.get_notification_email()
+
         context = {
-            'user_name': user.first_name,
+            'user_name': user.first_name or user.username,
             'reset_password_link': reset_link,
         }
         send_email(
             template_name='emails/reset_password.html',
             subject="Reset Your Password",
             context=context,
-            recipient_email=user.email,
+            recipient_email=notification_email,
         )
         return Response({"message": _("パスワードリセットリンクを送信しました。")}, status=status.HTTP_200_OK)
 
