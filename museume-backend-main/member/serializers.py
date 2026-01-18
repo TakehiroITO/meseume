@@ -1,22 +1,39 @@
 from django.contrib.auth import get_user_model, authenticate
 import re
+import secrets
+import string
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password, check_password
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from rest_framework.response import Response
 from django.utils.translation import gettext as _
 from member.helpers.emails import send_email
+from member.helpers import generate_ulid, generate_child_email
 from django.utils import timezone
 from .models import *
 Member = get_user_model()
+
+
+def generate_secure_password(length=16):
+    """Generate a secure random password for child accounts."""
+    characters = string.ascii_letters + string.digits + string.punctuation
+    return ''.join(secrets.choice(characters) for _ in range(length))
 
 class SignupSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
 
     class Meta:
         model = Member
-        fields = ['email', 'password', 'confirm_password']
+        fields = ['username', 'email', 'password', 'confirm_password']
         extra_kwargs = {'password': {'write_only': True}}
+
+    def validate_username(self, value):
+        # Username validation: alphanumeric, underscore, 3-30 characters
+        if len(value) < 3 or len(value) > 30:
+            raise serializers.ValidationError(_("Username must be between 3 and 30 characters."))
+        if not re.match(r'^[a-zA-Z0-9_]+$', value):
+            raise serializers.ValidationError(_("Username must contain only alphanumeric characters and underscores."))
+        return value
 
     def validate(self, attrs):
         password = attrs.get('password')
@@ -47,9 +64,10 @@ class SignupSerializer(serializers.ModelSerializer):
         # Remove confirm_password from validated_data
         validated_data.pop('confirm_password')
 
+        # Username is now the login identifier (separate from email)
         user = Member.objects.create_user(
+            username=validated_data['username'],
             email=validated_data['email'],
-            username=validated_data['email'],
         )
         user.set_password(validated_data['password'])
         user.is_active = False  # Deactivate account until email confirmation
@@ -57,25 +75,43 @@ class SignupSerializer(serializers.ModelSerializer):
         return user
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    # Support both username and email for login (username is primary)
+    username = serializers.CharField(required=False, allow_blank=True)
+    email = serializers.EmailField(required=False, allow_blank=True)
     password = serializers.CharField(write_only=True)
 
     def validate(self, attrs):
-        email = attrs.get('email')
+        username = attrs.get('username', '').strip()
+        email = attrs.get('email', '').strip()
         password = attrs.get('password')
 
-        user = authenticate(username=email, password=password)
+        # Require either username or email
+        if not username and not email:
+            raise serializers.ValidationError(_("ユーザー名またはメールアドレスを入力してください。"))
+
+        # Try to authenticate with username first, then email
+        user = None
+        if username:
+            user = authenticate(username=username, password=password)
+        if user is None and email:
+            # Try to find user by email and authenticate
+            try:
+                member = Member.objects.get(email=email)
+                user = authenticate(username=member.username, password=password)
+            except Member.DoesNotExist:
+                pass
 
         if user is None:
-            raise serializers.ValidationError(_("メールアドレスまたはパスワードが正しくありません。"))
-            
+            raise serializers.ValidationError(_("ユーザー名/メールアドレスまたはパスワードが正しくありません。"))
+
         if user.role != 'protector':
             raise serializers.ValidationError(_("保護者のみログインが許可されています"))
 
         access = AccessToken.for_user(user)
         refresh = RefreshToken.for_user(user)
 
-        #send email when a new login is requested
+        # Send email when a new login is requested
+        notification_email = user.get_notification_email()
         context = {
             "title": "ログイン通知",
             "login_time": timezone.localtime(timezone.now()),
@@ -84,13 +120,14 @@ class LoginSerializer(serializers.Serializer):
             template_name="emails/login_notification.html",
             subject="A New Login Detected",
             context=context,
-            recipient_email=email,
+            recipient_email=notification_email,
         )
         # Add user data to the response
         attrs['user'] = user
         attrs['access'] = str(access)
         attrs['refresh'] = str(refresh)
         attrs['role'] = user.role
+        attrs['ulid'] = user.ulid
 
         return attrs
 
@@ -100,6 +137,7 @@ class LoginSerializer(serializers.Serializer):
             'access': validated_data['access'],
             'refresh': validated_data['refresh'],
             'role': validated_data['role'],
+            'ulid': validated_data['ulid'],
         })
     
 class OrganizationSerializer(serializers.ModelSerializer):
@@ -111,7 +149,7 @@ class MemberSerializer(serializers.ModelSerializer):
     is_shared = serializers.SerializerMethodField()
     class Meta:
         model = Member
-        fields = ['id', 'username', 'profile_picture', 'is_shared'] 
+        fields = ['id', 'ulid', 'username', 'profile_picture', 'is_shared']
 
     def get_is_shared(self, obj):
         user = self.context.get('request').user
@@ -127,7 +165,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Member
-        fields = ['id', 'address', 'date_of_birth', 'profile_picture', 'username', 'is_published', 'organizations', 'shared_users', 'is_logged_in']
+        fields = ['id', 'ulid', 'address', 'date_of_birth', 'profile_picture', 'username', 'is_published', 'organizations', 'shared_users', 'is_logged_in']
     
     def get_is_logged_in(self, instance):
         request = self.context.get('request')  # Get request from context
@@ -143,17 +181,24 @@ class ProfileSerializer(serializers.ModelSerializer):
         # Set the role to 'child'
         validated_data['role'] = 'child'
 
-        # Assign the email to the username field
         username = validated_data.get('username')
-        validated_data['email'] = f"{username}@museume.com"
-
         validated_data['username'] = username
 
         # Associate the protector as the parent
         protector = self.context['request'].user
         validated_data['parent'] = protector
 
-        validated_data['password'] = make_password('66kVj5f@pkr')
+        # Generate ULID for the child (needed for email generation)
+        child_ulid = generate_ulid()
+        validated_data['ulid'] = child_ulid
+
+        # Generate child email using parent's email with suffix
+        # Format: parent_email#child_ULID
+        validated_data['email'] = generate_child_email(protector.email, child_ulid)
+
+        # Generate secure random password for child account
+        # Note: Children typically don't login directly, they use profile switch
+        validated_data['password'] = make_password(generate_secure_password())
         validated_data['is_active'] = True
 
         organizations = validated_data.pop('organizations', [])
@@ -166,7 +211,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
         if 'profile_picture' in validated_data:
             child.profile_picture = validated_data['profile_picture']
-        
+
         child.save()
         return child
     
@@ -254,7 +299,7 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
 class ProfileDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
-        fields = ['id', 'address', 'email', 'date_of_birth', 'profile_picture']
+        fields = ['id', 'ulid', 'address', 'email', 'date_of_birth', 'profile_picture']
 
 class AccountInfoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -322,6 +367,7 @@ class ProfileLoginSerializer(serializers.Serializer):
         attrs['child'] = child
         attrs['access'] = str(access)
         attrs['refresh'] = str(refresh)
+        attrs['ulid'] = child.ulid
 
         return attrs
 
@@ -331,4 +377,5 @@ class ProfileLoginSerializer(serializers.Serializer):
             'role': self.validated_data['child'].role,
             'access': self.validated_data['access'],
             'refresh': self.validated_data['refresh'],
+            'ulid': self.validated_data['ulid'],
         }
