@@ -175,9 +175,16 @@ class ProfileListView(generics.ListAPIView):
 
     def get_queryset(self):
         # Return only the children of the authenticated protector
+        # Use prefetch_related to avoid N+1 queries for organizations and shared_users
+        base_query = Member.objects.prefetch_related(
+            'organizations',
+            'shared_users',
+            'parent__children'  # For get_sibilings()
+        ).select_related('parent')
+
         if self.request.user.role == 'child':
-            return Member.objects.filter(parent=self.request.user.parent, role='child')
-        return Member.objects.filter(parent=self.request.user, role='child')
+            return base_query.filter(parent=self.request.user.parent, role='child')
+        return base_query.filter(parent=self.request.user, role='child')
 
 class SingleProfileView(generics.RetrieveAPIView):
     serializer_class = ProfileDetailSerializer

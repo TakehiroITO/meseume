@@ -14,7 +14,6 @@ from django.utils.translation import gettext as _
 from django.db.models import Q
 
 class WorkListCreateView(generics.ListCreateAPIView):
-    queryset = Work.objects.filter(is_public=True)
     serializer_class = WorkSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = WorkFilter
@@ -26,20 +25,34 @@ class WorkListCreateView(generics.ListCreateAPIView):
         serializer.save(member=self.request.user)
 
     def get_queryset(self):
-        # Optionally customize the queryset logic here, or just rely on filtering
-        return super().get_queryset()
+        # Use select_related and prefetch_related to avoid N+1 queries
+        return Work.objects.filter(is_public=True).select_related(
+            'member',
+            'category'
+        ).prefetch_related(
+            'images',
+            'tags',
+            'likes'
+        )
 
 class WorkDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Work.objects.all()
     serializer_class = WorkSerializer
     #permission_classes = [IsAuthenticated]
-    
+
     def get_queryset(self):
         """
         Return the list of artworks uploaded by the current authenticated user.
+        Use select_related and prefetch_related to avoid N+1 queries.
         """
         return Work.objects.filter(
             (Q(member=self.request.user) & Q(is_public=False)) | Q(is_public=True)
+        ).select_related(
+            'member',
+            'category'
+        ).prefetch_related(
+            'images',
+            'tags',
+            'likes'
         )
 
 class MemberArtworkListView(generics.ListAPIView):
@@ -53,8 +66,16 @@ class MemberArtworkListView(generics.ListAPIView):
     def get_queryset(self):
         """
         Return the list of artworks uploaded by the current authenticated user.
+        Use select_related and prefetch_related to avoid N+1 queries.
         """
-        return Work.objects.filter(member=self.request.user)
+        return Work.objects.filter(member=self.request.user).select_related(
+            'member',
+            'category'
+        ).prefetch_related(
+            'images',
+            'tags',
+            'likes'
+        )
       
 class MemberSpecificArtworkListView(generics.ListAPIView):
     serializer_class = WorkSerializer
@@ -68,10 +89,18 @@ class MemberSpecificArtworkListView(generics.ListAPIView):
     def get_queryset(self):
         """
         Return the list of artworks uploaded by the specified member (by ID or username).
+        Use select_related and prefetch_related to avoid N+1 queries.
         """
         member_id = self.kwargs.get('member_id')
 
-        return Work.objects.filter(member__id=member_id, is_public=True)
+        return Work.objects.filter(member__id=member_id, is_public=True).select_related(
+            'member',
+            'category'
+        ).prefetch_related(
+            'images',
+            'tags',
+            'likes'
+        )
 
 class MyCollectionView(generics.ListAPIView):
     serializer_class = WorkSerializer
@@ -84,10 +113,18 @@ class MyCollectionView(generics.ListAPIView):
     def get_queryset(self):
         """
         Return all works liked by the currently authenticated user.
+        Use select_related and prefetch_related to avoid N+1 queries.
         """
         # Get the works that the logged-in user has liked
         liked_work_ids = Like.objects.filter(member=self.request.user).values_list('work_id', flat=True)
-        return Work.objects.filter(id__in=liked_work_ids)
+        return Work.objects.filter(id__in=liked_work_ids).select_related(
+            'member',
+            'category'
+        ).prefetch_related(
+            'images',
+            'tags',
+            'likes'
+        )
 
 class LikeWorkView(APIView):
     """

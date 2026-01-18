@@ -49,29 +49,63 @@ class Organization(models.Model):
     
     def get_branches(self):
         return self.branches.all()
-    
-    def get_nested_branches(self):
-        all_branch_ids = Organization.get_all_branch_ids(self)
-        return Organization.objects.filter(id__in=all_branch_ids).all()
 
-    # Recursive function to collect all branch IDs
+    def get_nested_branches(self):
+        all_branch_ids = self.get_all_branch_ids_optimized()
+        return Organization.objects.filter(id__in=all_branch_ids)
+
     @classmethod
     def get_all_branch_ids(cls, org):
-        branch_ids = [org.id]
-        for branch in org.branches.all():
-            branch_ids.extend(Organization.get_all_branch_ids(branch))
-        return branch_ids
+        """
+        Optimized: Get all branch IDs using a single query.
+        Fetches all organizations and builds the tree in memory.
+        """
+        return org.get_all_branch_ids_optimized()
+
+    def get_all_branch_ids_optimized(self):
+        """
+        Get all descendant organization IDs (including self) using a single query.
+
+        This avoids the N+1 problem by:
+        1. Fetching all organizations in one query
+        2. Building parent-child relationships in memory
+        3. Traversing the tree iteratively
+
+        Returns:
+            list: List of organization IDs including self and all descendants
+        """
+        # Fetch all organizations with their parent_id in a single query
+        all_orgs = Organization.objects.values('id', 'parent_id')
+
+        # Build a mapping of parent_id -> list of child IDs
+        children_map = {}
+        for org in all_orgs:
+            parent_id = org['parent_id']
+            if parent_id not in children_map:
+                children_map[parent_id] = []
+            children_map[parent_id].append(org['id'])
+
+        # Iteratively collect all descendant IDs (BFS)
+        result = [self.id]
+        queue = [self.id]
+
+        while queue:
+            current_id = queue.pop(0)
+            child_ids = children_map.get(current_id, [])
+            result.extend(child_ids)
+            queue.extend(child_ids)
+
+        return result
 
     def get_children(self):
         """
         Retrieve all Members with the role 'child' who are part of this Organization
         or any of its branches (recursively).
+
+        Optimized to avoid N+1 queries.
         """
-        # 1. Collect all branch IDs (including self) via a helper method
-        all_branch_ids = Organization.get_all_branch_ids(self)
-        
-        # 2. Return all 'child' Members whose organization FK or
-        #    organizations M2M field links to one of those branch IDs.
+        all_branch_ids = self.get_all_branch_ids_optimized()
+
         return Member.objects.filter(
             role='child'
         ).filter(
