@@ -21,6 +21,12 @@ class WorkListCreateView(generics.ListCreateAPIView):
     pagination_class = CustomPageNumberPagination
 
     def perform_create(self, serializer):
+        # RFP: Check work limit before allowing creation
+        can_create, message = Work.can_create_work(self.request.user)
+        if not can_create:
+            from rest_framework.exceptions import ValidationError
+            raise ValidationError({'detail': message})
+
         # If you want to assign the currently authenticated user to the work
         serializer.save(member=self.request.user)
 
